@@ -1,26 +1,22 @@
 from food_requests import Collector
 from modules.database_service import DatabaseService
+import terminal_app as tapp
 
 collector = Collector()
 list_of_categories = ('soup', 'pizza', 'salad', 'cake', 'cheese')
-list_of_products = []
 
-soups_returned = collector.get_products_by_category(list_of_categories[0])
-list_of_products.append(soups_returned)
-# print(soups_returned)
-# pizzas_returned = collector.get_products_by_category(list_of_categories[1])
-# print(pizzas_returned)
-# salads_returned = collector.get_products_by_category(list_of_categories[2])
-# print(salads_returned)
-# cakes_returned = collector.get_products_by_category(list_of_categories[3])
-# print(cakes_returned)
-# cheeses_returned = collector.get_products_by_category(list_of_categories[4])
-# print(cheeses_returned)
 
-db = DatabaseService.get_instance()
-db.connect_to_mysql("root", "Hamzamal89", "127.0.0.1", "purbeurre")
-print(db.is_connected())
+#for category in list_of_categories:
+ #   food_returned = collector.get_products_by_category(category)
+ #   DatabaseService.fill_products_table(food_returned)
+category_selected = None
+term = tapp.Interactive()
 
-#db.insert_category(list_of_categories)
+
+
+# for category in list_of_categories:
+  #   category_entry = {"Name": category}
+  #   db.fill_categories_table(category_entry)
+
 
 

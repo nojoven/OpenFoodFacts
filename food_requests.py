@@ -1,4 +1,8 @@
+from json import JSONDecodeError
+
 import requests as reqs
+import peewee
+from modeles.product import Product
 
 
 class Collector:
@@ -10,18 +14,26 @@ class Collector:
 
     def get_products_by_category(self, category):
         results = []
-        self.params["tag_0"] = category
-        req = reqs.get(self.url, self.params)
-        data = req.json()
-        products = data["products"]
+        products = []
+        try:
+            self.params["tag_0"] = category
+            req = reqs.get(self.url, self.params)
+            data = req.json()
+            products = data["products"]
+
+        except JSONDecodeError:
+            pass
         for product in products:
             try:
+                if not product["stores_tags"] or not product["quantity"]:
+                    continue
                 product_data = {
-                    "stores_tags": product["stores_tags"],
-                    "brands": product["brands"],
-                    "product_name": product["product_name"],
-                    "nutrition_grade_fr": product["nutrition_grade_fr"],
-                    "quantity": product["quantity"]
+                    "Stores": str(product["stores_tags"])[1:-1],
+                    "Brands": product["brands"],
+                    "ProductName": product["product_name"],
+                    "Nutrigrade": product["nutrition_grade_fr"],
+                    "Category": category,
+                    "Quantity": product["quantity"]
                 }
             except KeyError:
                 continue
