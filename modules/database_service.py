@@ -2,6 +2,7 @@ import peewee as p
 import _json
 from modeles.product import Product
 from modeles.category import Categories
+from modeles.favorite import Favorites
 
 
 class DatabaseService:
@@ -53,12 +54,27 @@ class DatabaseService:
                 continue
         if better_choice in better_ids:
             good_product = Product.select().where(Product.idProduct == better_choice).get()
+            good_category = good_product.Category
+            good_brands = good_product.Brands
+            good_stores = good_product.Stores
+            good_quantity = good_product.Quantity
             print(f"You don't like{product_data.idProduct}--{product_data.ProductName} "
                   f"\n--Nutrigrade = {product_data.Nutrigrade} "
                   f"You prefer {good_product.idProduct}---{good_product.ProductName}. "
                   f"Nutrigrade = {good_product.Nutrigrade} "
                   f"\nFavorites table edited.")
-
+            DatabaseService.save_preference(good_product.idProduct, good_category, good_product.ProductName,
+                                            good_product.Nutrigrade, good_stores, good_brands, good_quantity,
+                                            product_data.idProduct, product_data.ProductName, product_data.Nutrigrade)
 
     @staticmethod
-    def update
+    def save_preference(preferred_id, preferred_category, preferred_name, preferred_grade,
+                        preferred_stores, preferred_brands, preferred_quantity,
+                        replaced_id, replaced_name, replaced_grade):
+        query = Favorites.insert(idProduct=preferred_id, Name=preferred_name, Nutrigrade=preferred_grade,
+                                 Category=preferred_category, Stores=preferred_stores,
+                                 Brands=preferred_brands, Quantity=preferred_quantity,
+                                 ReplacedID=replaced_id, ReplacedArticle=replaced_name,
+                                 ReplacedNutrigrade=replaced_grade)
+        query.execute()
+        print("Favorites updated. ")
