@@ -53,4 +53,5 @@ class Interactive:
             if article_to_replace_id in DatabaseService.articles_ids:
                 print("VALID ARTICLE")
                 DatabaseService.show_better_products(article_to_replace_id, category_selected)
+                Interactive.first_choice()
 

@@ -39,33 +39,39 @@ class DatabaseService:
         print(f"Nutrigrade is {product_nutrigrade}. ")
         better_products = Product.select().where((Product.Category == category_selected) &
                                                  (Product.Nutrigrade < product_nutrigrade))
-        better_ids = []
-        good_product = None
-        for better in better_products:
-            print(f"{better.idProduct}---{better.ProductName}:{better.Nutrigrade}")
-            better_ids.append(better.idProduct)
 
-        better_choice = None
-        while better_choice not in better_ids:
-            try:
-                print("Choose a product to replace the bad product.")
-                better_choice = int(input("Enter the ID of a better product: "))
-            except ValueError:
-                continue
-        if better_choice in better_ids:
-            good_product = Product.select().where(Product.idProduct <= better_choice).get()
-            good_category = good_product.Category
-            good_brands = good_product.Brands
-            good_stores = good_product.Stores
-            good_quantity = good_product.Quantity
-            print(f"You don't like \n{product_data.idProduct}--{product_data.ProductName} "
-                  f"\n--Nutrigrade = {product_data.Nutrigrade}. \n"
-                  f"You prefer {good_product.idProduct}---{good_product.ProductName}. \n"
-                  f"Nutrigrade = {good_product.Nutrigrade} "
-                  f"\nFavorites table edited.")
-            DatabaseService.save_preference(good_product.idProduct, good_category, good_product.ProductName,
-                                            good_product.Nutrigrade, good_stores, good_brands, good_quantity,
-                                            product_data.idProduct, product_data.ProductName, product_data.Nutrigrade)
+        if len(better_products) != 0:
+
+            better_ids = []
+            good_product = None
+            for better in better_products:
+                print(f"{better.idProduct}---{better.ProductName}:{better.Nutrigrade}")
+                better_ids.append(better.idProduct)
+
+            better_choice = None
+            while better_choice not in better_ids:
+                try:
+                    print("Choose a product to replace the bad product.")
+                    better_choice = int(input("Enter the ID of a better product: "))
+                except ValueError:
+                    continue
+            if better_choice in better_ids:
+                good_product = Product.select().where(Product.idProduct == better_choice).get()
+                good_id = better_choice
+                good_category = good_product.Category
+                good_brands = good_product.Brands
+                good_stores = good_product.Stores
+                good_quantity = good_product.Quantity
+                print(f"You don't like \n{product_data.idProduct}--{product_data.ProductName} "
+                      f"\n--Nutrigrade = {product_data.Nutrigrade}. \n"
+                      f"You prefer {better_choice}---{good_product.ProductName}. \n"
+                      f"Nutrigrade = {good_product.Nutrigrade} "
+                      f" \n Favorites table edition...")
+                DatabaseService.save_preference(good_id, good_category, good_product.ProductName,
+                                                good_product.Nutrigrade, good_stores, good_brands, good_quantity,
+                                                product_data.idProduct, product_data.ProductName, product_data.Nutrigrade)
+        else:
+            print("The nutriscore is already 'A'. There is no better product.")
 
     @staticmethod
     def save_preference(preferred_id, preferred_category, preferred_name, preferred_grade,

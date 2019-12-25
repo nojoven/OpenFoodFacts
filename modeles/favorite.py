@@ -4,7 +4,8 @@ db = peewee.MySQLDatabase('purbeurre', user='root', password='Hamzamal89', host=
 
 
 class Favorites(peewee.Model):
-    ProductID = peewee.PrimaryKeyField()
+    FavoriteID = peewee.PrimaryKeyField()
+    ProductID = peewee.IntegerField()
     Name = peewee.CharField()
     Nutrigrade = peewee.CharField()
     Stores = peewee.CharField()
