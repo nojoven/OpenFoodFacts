@@ -19,9 +19,11 @@ class Interactive:
                 continue
         if value == 1:
             Interactive.choose_category()
+        elif value == 2:
+            print("Printing your favorites...")
+            DatabaseService.show_favorites()
         else:
-            print(value)
-
+            print(f"You entered {value}. Bad entry. ")
 
     @staticmethod
     def choose_category():
