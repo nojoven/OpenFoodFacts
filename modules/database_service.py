@@ -84,3 +84,9 @@ class DatabaseService:
                                  ReplacedNutrigrade=replaced_grade)
         query.execute()
         print("Favorites updated. ")
+
+    @staticmethod
+    def show_favorites():
+        favorites_table = Favorites.select().dicts()
+        for fav in favorites_table:
+            print(f"{fav} \n")
