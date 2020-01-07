@@ -1,30 +1,48 @@
-import peewee as p
-import _json
+"""
+Data management code
+
+This file is used to interact with the database in order to display and manipulate the data
+depending on the user actions in the terminal.
+It uses the orm objects Product, Categories and Favorites
+
+"""
 from modeles.product import Product
 from modeles.category import Categories
 from modeles.favorite import Favorites
 
 
 class DatabaseService:
+    """
+    DatabaseServices
+
+    Class created to provide statics methods that allows my terminal app do deal with the mysql data.
+    Being static makes the call of DatabaseService's functions easier.
+    """
+
+    # I created this list here to be accessible inside the methods
     articles_ids = []
 
+    # Insert multiple data at a time in multiple rows in (table Product)
     @staticmethod
     def fill_products_table(plist):
         with Product.get_db().atomic():
             query = Product.insert_many(plist)
             query.execute()
 
+    # Insert multiple data at a time in multiple rows in (table Categories)
     @staticmethod
     def fill_categories_table(category):
         with Categories.get_db().atomic():
             query = Categories.insert_many(category)
             query.execute()
 
+    # Returns the content of the table Categories
     @staticmethod
     def show_entire_categories_table():
         categories_table = Categories.select().dicts()
         return categories_table
 
+    # Prints the products that correspond to the category selected by the user
     @staticmethod
     def show_all_category_products(category_selected):
         entire_category = Product.select().where(Product.Category == category_selected).dicts()
@@ -32,8 +50,17 @@ class DatabaseService:
             DatabaseService.articles_ids.append(article['idProduct'])
             print(f"{article['idProduct']} : {article['ProductName']}")
 
+    # Prints in the category selected
+    # the products that have a better nutrigrade than the substituted product
     @staticmethod
     def show_better_products(product_id, category_selected):
+        """
+        Substitution process
+
+        This method starts with the display of the better products.
+        Then the user is asked to select a preferred product.
+        Finally the preferred product is saved in the table 'Favorite'.
+        """
         product_data = Product.select().where(Product.idProduct == product_id).get()
         product_nutrigrade = product_data.Nutrigrade
         print(f"Nutrigrade is {product_nutrigrade}. ")
@@ -41,9 +68,7 @@ class DatabaseService:
                                                  (Product.Nutrigrade < product_nutrigrade))
 
         if len(better_products) != 0:
-
             better_ids = []
-            good_product = None
             for better in better_products:
                 print(f"{better.idProduct}---{better.ProductName}:{better.Nutrigrade}")
                 better_ids.append(better.idProduct)
@@ -55,6 +80,7 @@ class DatabaseService:
                     better_choice = int(input("Enter the ID of a better product: "))
                 except ValueError:
                     continue
+
             if better_choice in better_ids:
                 good_product = Product.select().where(Product.idProduct == better_choice).get()
                 good_id = better_choice
@@ -69,10 +95,12 @@ class DatabaseService:
                       f" \n Favorites table edition...")
                 DatabaseService.save_preference(good_id, good_category, good_product.ProductName,
                                                 good_product.Nutrigrade, good_stores, good_brands, good_quantity,
-                                                product_data.idProduct, product_data.ProductName, product_data.Nutrigrade)
+                                                product_data.idProduct, product_data.ProductName,
+                                                product_data.Nutrigrade)
         else:
             print("The nutriscore is already 'A'. There is no better product.")
 
+    # Saves the preferred product with some data about the replaced one in the table 'Favorites'
     @staticmethod
     def save_preference(preferred_id, preferred_category, preferred_name, preferred_grade,
                         preferred_stores, preferred_brands, preferred_quantity,
@@ -85,6 +113,7 @@ class DatabaseService:
         query.execute()
         print("Favorites updated. ")
 
+    # Displays the content of the table Favorites
     @staticmethod
     def show_favorites():
         favorites_table = Favorites.select().dicts()
