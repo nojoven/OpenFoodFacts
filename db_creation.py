@@ -17,12 +17,14 @@ from food_requests import Collector
 from modeles.category import Categories
 from modeles.favorite import Favorites
 from modeles.product import Product
+from modeles.users import Users
 from modules.database_service import DatabaseService
 
 # Creation of the tables
 Product.create_table()
 Categories.create_table()
 Favorites.create_table()
+Users.create_table()
 
 # Instantiation of a Collector
 collector = Collector()
