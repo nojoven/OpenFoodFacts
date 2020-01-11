@@ -4,7 +4,6 @@ Data management code
 This file is used to interact with the database in order to display and manipulate the data
 depending on the user actions in the terminal.
 It uses the orm objects Product, Categories and Favorites
-
 """
 from modeles.product import Product
 from modeles.category import Categories

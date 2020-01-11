@@ -20,8 +20,14 @@ class Interactive:
         self.userId = None
         self.log_user()
 
-    # Login
+    # Login function
     def log_user(self):
+        """
+        Starting point
+
+        As a user I have access to the application.
+        If the user does not exist I can create it.
+        """
         log_options = ["1. Sign-in ", "2. Create user "]
         print(f"{log_options[0]}\n{log_options[1]}")
         log_choice = None
@@ -39,6 +45,13 @@ class Interactive:
 
     # I display the two options at the begining
     def first_choice(self):
+        """
+        First choices as a user.
+
+        Here I can:
+        - Decide to substitute a product
+        - Or see my favorite products.
+        """
         start_choices = ["1. Which food do you want to replace ?", "2. Display your favourite food"]
         print(f"{start_choices[0]}\n{start_choices[1]}")
         value = None
@@ -59,6 +72,20 @@ class Interactive:
 
     # I display the table 'Categories' in order to ask the user to select a category
     def choose_category(self, user_id):
+        """
+
+        Displaying one category at a time
+
+        The user will have the products list of only one category.
+        The categories are associated to their ID.
+        The user enters an ID to display the entire list of products in the chosen category.
+
+        Then the user chooses a product to replace so the application displays the list of product
+        that have a better nutrigrade being in the same category.
+
+        Finally the user selects one of these better products which is saved in the database as a favorite
+        of the current user.
+        """
         categories_table = DatabaseService.show_entire_categories_table()
         inside_options = [element for element in categories_table]
         categories_table_dict = {}
@@ -95,12 +122,26 @@ class Interactive:
                 self.first_choice()
 
     def create_user(self):
+        """
+
+        Creating a user
+
+        Here the program asks the necessary information that are ned to create a user.
+        """
         username = input("Enter a username: ")
         userpass = input(f"Enter a password for {username}: ")
         DatabaseService.save_user(username, userpass)
         self.log_user()
 
     def signin(self):
+        """
+
+        Authentication.
+
+        The program needs to know who uses it in order to save ans display the favorites.
+        Hence there is an authentication step where the user is asked his name and password.
+        If they are matching with somebody's data in the users table the user can continue.
+        """
         username = input("Enter a username: ")
         userpass = input(f"Enter a password for {username}: ")
         user = DatabaseService.authentify_user(username, userpass)
@@ -112,9 +153,3 @@ class Interactive:
         else:
             print("Failed authentification. ")
             self.log_user()
-
-
-
-
-
-
