@@ -49,15 +49,16 @@ class Interactive:
             except ValueError:
                 continue
         if value == 1:
-            self.choose_category()
+            self.choose_category(self.userId)
         elif value == 2:
             print("Printing your favorites...")
-            DatabaseService.show_favorites()
+            DatabaseService.show_favorites(self.userId)
+            self.first_choice()
         else:
             print(f"You entered {value}. Bad entry. ")
 
     # I display the table 'Categories' in order to ask the user to select a category
-    def choose_category(self):
+    def choose_category(self, user_id):
         categories_table = DatabaseService.show_entire_categories_table()
         inside_options = [element for element in categories_table]
         categories_table_dict = {}
@@ -89,7 +90,7 @@ class Interactive:
             if article_to_replace_id in DatabaseService.articles_ids:
                 print("VALID ARTICLE")
                 # If the id is valid we go to the substitution steps
-                DatabaseService.show_better_products(article_to_replace_id, category_selected)
+                DatabaseService.show_better_products(article_to_replace_id, category_selected, user_id)
                 # After the substitution we go back to the initial screen
                 self.first_choice()
 

@@ -54,7 +54,7 @@ class DatabaseService:
     # Prints in the category selected
     # the products that have a better nutrigrade than the substituted product
     @staticmethod
-    def show_better_products(product_id, category_selected):
+    def show_better_products(product_id, category_selected, user_id):
         """
         Substitution process
 
@@ -97,7 +97,7 @@ class DatabaseService:
                 DatabaseService.save_preference(good_id, good_category, good_product.ProductName,
                                                 good_product.Nutrigrade, good_stores, good_brands, good_quantity,
                                                 product_data.idProduct, product_data.ProductName,
-                                                product_data.Nutrigrade)
+                                                product_data.Nutrigrade, user_id)
         else:
             print("The nutriscore is already 'A'. There is no better product.")
 
@@ -105,21 +105,24 @@ class DatabaseService:
     @staticmethod
     def save_preference(preferred_id, preferred_category, preferred_name, preferred_grade,
                         preferred_stores, preferred_brands, preferred_quantity,
-                        replaced_id, replaced_name, replaced_grade):
+                        replaced_id, replaced_name, replaced_grade, user_id):
         query = Favorites.insert(ProductID=preferred_id, Name=preferred_name, Nutrigrade=preferred_grade,
                                  Category=preferred_category, Stores=preferred_stores,
                                  Brands=preferred_brands, Quantity=preferred_quantity,
                                  ReplacedID=replaced_id, ReplacedArticle=replaced_name,
-                                 ReplacedNutrigrade=replaced_grade)
+                                 ReplacedNutrigrade=replaced_grade, UserID=user_id)
         query.execute()
         print("Favorites updated. ")
 
     # Displays the content of the table Favorites
     @staticmethod
-    def show_favorites():
-        favorites_table = Favorites.select().dicts()
-        for fav in favorites_table:
-            print(f"{fav} \n")
+    def show_favorites(user_id):
+        favorites_table = Favorites.select().where(Favorites.UserID == user_id).dicts()
+        if len(favorites_table) != 0:
+            for fav in favorites_table:
+                print(f"{fav} \n")
+        else:
+            print("You have no favorite. ")
 
     # Save the user to create it in mysql
     @staticmethod
