@@ -45,6 +45,12 @@ class DatabaseService:
     # Prints the products that correspond to the category selected by the user
     @staticmethod
     def show_all_category_products(category_selected):
+        """
+
+        To show the wanted products
+
+        I look for the name of the category selected in the column of the category.
+        """
         entire_category = Product.select().where(Product.Category == category_selected).dicts()
         for article in entire_category:
             DatabaseService.articles_ids.append(article['idProduct'])
@@ -105,6 +111,13 @@ class DatabaseService:
     def save_preference(preferred_id, preferred_category, preferred_name, preferred_grade,
                         preferred_stores, preferred_brands, preferred_quantity,
                         replaced_id, replaced_name, replaced_grade, user_id):
+        """
+
+        Saving the preferred products.
+
+        I save it by providing the data for each column of the entry row including the user id.
+        You cannot save a substitution that is already recorded.
+        """
         already_saved = Favorites.select().where((Favorites.ProductID == preferred_id) &
                                                  (Favorites.ReplacedID == replaced_id) &
                                                  (Favorites.UserID == user_id)).dicts()
@@ -119,9 +132,15 @@ class DatabaseService:
         else:
             print("This favorite already exists. ")
 
-    # Displays the content of the table Favorites
+    # Displays the content of the table Favorites that correspond to the current user.
     @staticmethod
     def show_favorites(user_id):
+        """
+
+        Displaying the user's preferences.
+
+        To fetch the user's favorites I only look for the enties that have the user ID of the current user.
+        """
         favorites_table = Favorites.select().where(Favorites.UserID == user_id).dicts()
         if len(favorites_table) != 0:
             for fav in favorites_table:
@@ -132,6 +151,17 @@ class DatabaseService:
     # Save the user to create it in mysql
     @staticmethod
     def save_user(username, userpass):
+        """
+
+        Adding a user to the database.
+
+        In the table 'Users' there are three columns:
+        - one for the ID
+        - one for the password
+        - one for the username
+        The ID which is the primary key is auto-incremented.
+        So we only provide the username and the password of the current user to the database engine.
+        """
         query = Users.insert(Username=username, password=userpass)
         query.execute()
         print("User created. ")
@@ -139,5 +169,12 @@ class DatabaseService:
     # Login user
     @staticmethod
     def authentify_user(username, userpass):
+        """
+
+        Login
+
+        I check the validity of the username input and the password input by verifying if there is a user who
+        possesses these username and password
+        """
         query = Users.select().where((Users.Username == username) & (Users.password == userpass))
         return query
