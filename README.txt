@@ -7,19 +7,21 @@ So what we built is a kind of game where we select products, where we save our p
 The list of products is given by the OpenFoodFacts API.
 
 How it works:
-The program offers us two choices for starting.
+Before anything else you have to sign in or to sign up.
+
+The program offers two choices for starting.
 1- Which product do you want to replace
 2 - Display your favorites
 
 Choice 1
-- The program asks us to select a category.
-- The program shows us the list of every products in the chosen category
-- We are asked to select one article
+- The program asks you to select a category.
+- The program displays the list of every products in the chosen category
+- You are asked to select one article
 - Once entered the program displays the list of products which possess a better nutrigrade (if nutrigrade is not already 'A')
-- We have to select one of the displayed articles
-- Its data and data of the replaced product are stored into the database
+- You have to select one of the displayed articles
+- Its data and data of the replaced product are stored into the database with your ID
 
 Choice 2
-The program displays the data that are stored in the favorites table.  
+The program displays the data that are stored in the favorites table AND that possess your ID.  
 
 Trello: https://trello.com/b/lbqJxrk7/p5
