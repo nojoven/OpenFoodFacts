@@ -42,8 +42,7 @@ class Favorites(peewee.Model):
     ReplacedID = peewee.IntegerField()
     ReplacedArticle = peewee.CharField()
     ReplacedNutrigrade = peewee.CharField()
-    UserID =peewee.CharField()
-
+    UserID = peewee.CharField()
 
     # A getter is necessary to process the data using python
     @staticmethod

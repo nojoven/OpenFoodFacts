@@ -6,3 +6,4 @@ class SignIn:
         self.password = self.password
 
     def verify(self):
+        pass

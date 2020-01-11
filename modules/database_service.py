@@ -9,6 +9,7 @@ It uses the orm objects Product, Categories and Favorites
 from modeles.product import Product
 from modeles.category import Categories
 from modeles.favorite import Favorites
+from modeles.users import Users
 
 
 class DatabaseService:
@@ -119,3 +120,16 @@ class DatabaseService:
         favorites_table = Favorites.select().dicts()
         for fav in favorites_table:
             print(f"{fav} \n")
+
+    # Save the user to create it in mysql
+    @staticmethod
+    def save_user(username, userpass):
+        query = Users.insert(Username=username, password=userpass)
+        query.execute()
+        print("User created. ")
+
+    # Login user
+    @staticmethod
+    def authentify_user(username, userpass):
+        query = Users.select().where((Users.Username == username) & (Users.password == userpass))
+        return query
