@@ -106,13 +106,19 @@ class DatabaseService:
     def save_preference(preferred_id, preferred_category, preferred_name, preferred_grade,
                         preferred_stores, preferred_brands, preferred_quantity,
                         replaced_id, replaced_name, replaced_grade, user_id):
-        query = Favorites.insert(ProductID=preferred_id, Name=preferred_name, Nutrigrade=preferred_grade,
-                                 Category=preferred_category, Stores=preferred_stores,
-                                 Brands=preferred_brands, Quantity=preferred_quantity,
-                                 ReplacedID=replaced_id, ReplacedArticle=replaced_name,
-                                 ReplacedNutrigrade=replaced_grade, UserID=user_id)
-        query.execute()
-        print("Favorites updated. ")
+        already_saved = Favorites.select().where((Favorites.ProductID == preferred_id) &
+                                                 (Favorites.ReplacedID == replaced_id) &
+                                                 (Favorites.UserID == user_id)).dicts()
+        if len(already_saved) == 0:
+            query = Favorites.insert(ProductID=preferred_id, Name=preferred_name, Nutrigrade=preferred_grade,
+                                     Category=preferred_category, Stores=preferred_stores,
+                                     Brands=preferred_brands, Quantity=preferred_quantity,
+                                     ReplacedID=replaced_id, ReplacedArticle=replaced_name,
+                                     ReplacedNutrigrade=replaced_grade, UserID=user_id)
+            query.execute()
+            print("Favorites updated. ")
+        else:
+            print("This favorite already exists. ")
 
     # Displays the content of the table Favorites
     @staticmethod
