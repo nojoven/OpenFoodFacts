@@ -1,6 +1,7 @@
 """
 
 Entry point
+
 This is the entry point of the program.
 Executing this file makes my application start.
 """
