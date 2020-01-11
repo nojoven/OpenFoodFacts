@@ -30,6 +30,12 @@ class Collector:
         self.url = "https://fr.openfoodfacts.org/cgi/search.pl"
 
     def get_products_by_category(self, category):
+        """
+
+        Five API requests for my five categories.
+
+        I send a GET request for 1000 product of a category, then 1000 from another one, etc.
+        """
         # I create lists to use them later
         results = []
         products = []
