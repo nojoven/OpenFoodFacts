@@ -53,4 +53,3 @@ class Favorites(peewee.Model):
     class Meta:
         database = db
         db_table = 'favorites'
-

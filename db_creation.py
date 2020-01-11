@@ -41,4 +41,3 @@ for category in list_of_categories:
 for category in list_of_categories:
     food_returned = collector.get_products_by_category(category)
     DatabaseService.fill_products_table(food_returned)
-
