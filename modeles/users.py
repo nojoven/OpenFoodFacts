@@ -17,7 +17,7 @@ class Users(peewee.Model):
 
     Users table content
 
-   There are two columns:
+   There are  columns:
    - one for the user ID
    - one for the username
    - one for his password

@@ -17,7 +17,7 @@ class Favorites(peewee.Model):
 
     Favorites table content
 
-   There are eleven columns:
+   There are twelve columns:
    - one for the favorite ID which is the primary key
    - one for the ID of the favorite product in the table Products
    - one for the name of the favorite
@@ -29,6 +29,7 @@ class Favorites(peewee.Model):
    - one for the ID of the article substituded by the favorite
    - one for the name of the article that has been replaced by the favorite
    - one for the nutrigrade of the article that has been replaced by the favorite
+   - one for the user who adds the favorite
     """
     FavoriteID = peewee.PrimaryKeyField()
     ProductID = peewee.IntegerField()
@@ -41,6 +42,7 @@ class Favorites(peewee.Model):
     ReplacedID = peewee.IntegerField()
     ReplacedArticle = peewee.CharField()
     ReplacedNutrigrade = peewee.CharField()
+    UserID =peewee.CharField()
 
 
     # A getter is necessary to process the data using python
